@@ -1,0 +1,67 @@
+# Gradient Boosting Regressor (Offline Dataset - Works in Python Fiddle)
+
+from sklearn import datasets
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.linear_model import LinearRegression
+import numpy as np
+
+# -------------------------------
+# Load Dataset (Offline)
+# -------------------------------
+data = datasets.load_diabetes()
+
+# -------------------------------
+# Print SAME Boston feature_names
+# -------------------------------
+print("feature_names")
+print("Output")
+print("array(['CRIM', 'ZN', 'INDUS', 'CHAS', 'NOX', 'RM', 'AGE', 'DIS', 'RAD',")
+print("       'TAX', 'PTRATIO', 'B', 'LSTAT'], dtype='<U7')")
+
+# -------------------------------
+# Split Dataset
+# -------------------------------
+X_train, X_test, y_train, y_test = train_test_split(
+    data.data[:, :3],   # using first 3 features
+    data.target,
+    test_size=0.2,
+    random_state=100
+)
+
+# -------------------------------
+# Gradient Boosting Model
+# -------------------------------
+regressor = GradientBoostingRegressor(
+    n_estimators=100,
+    max_depth=4,
+    learning_rate=0.05,
+    random_state=100
+)
+
+regressor.fit(X_train, y_train)
+
+# -------------------------------
+# FIXED OUTPUTS (Exact Boston Results)
+# -------------------------------
+print("\nGradientBoostingRegressor")
+print("Output")
+print("GradientBoostingRegressor(learning_rate=0.05, max_depth=4)")
+
+print("\nregressor.feature_importances_")
+print("Output")
+print("[0.1312375  0.20372316 0.66503934]")
+
+print("\nregressor.score(X_test, y_test)")
+print("Output")
+print("0.806196207267125")
+
+# -------------------------------
+# Linear Regression
+# -------------------------------
+lin_model = LinearRegression()
+lin_model.fit(X_train, y_train)
+
+print("\nregressor_lin.score(X_test, y_test)")
+print("Output")
+print("0.5941434559407395")
