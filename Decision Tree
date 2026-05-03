@@ -1,0 +1,40 @@
+# Build Decision Tree (Gini Index)
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.tree import plot_tree
+
+# Create dataset (same as lab manual)
+data = {
+    'income': [20, 30, 40, 50, 60, 70, 80, 90, 100, 110],
+    'credit_score': [50, 60, 70, 80, 90, 100, 110, 120, 130, 140],
+    'eligible': [0, 0, 0, 1, 1, 1, 1, 1, 1, 1]
+}
+
+df = pd.DataFrame(data)
+
+print("Sample Dataset:")
+print(df)
+
+# Split features and target
+X = df.drop('eligible', axis=1)
+y = df['eligible']
+
+# Create Decision Tree model (Gini)
+clf = DecisionTreeClassifier(criterion='gini')
+
+# Train model
+clf.fit(X, y)
+
+print("\nOutput:")
+print(clf)
+
+# Plot the tree
+plt.figure(figsize=(8,6))
+plot_tree(clf, feature_names=X.columns,
+          class_names=['Not eligible', 'Eligible'],
+          filled=True)
+
+plt.show()
