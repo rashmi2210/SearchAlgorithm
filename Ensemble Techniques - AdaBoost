@@ -1,0 +1,81 @@
+# Implement Ensembling Technique (AdaBoost) on Iris Dataset
+
+from sklearn import datasets
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import AdaBoostClassifier
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Load dataset
+iris = datasets.load_iris()
+
+# Take only first two features
+X = iris.data[:, :2]
+y = iris.target
+
+# Split dataset
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Create AdaBoost classifier
+classifier_adb = AdaBoostClassifier(
+    n_estimators=100,
+    learning_rate=0.1,
+    random_state=42
+)
+
+# Train model
+classifier_adb.fit(X_train, y_train)
+
+# -------------------------------
+# Print Output (as in record)
+# -------------------------------
+print("classifier_adb.score(X_test, y_test)")
+print("Output")
+print(classifier_adb.score(X_test, y_test))
+
+# -------------------------------
+# Plot Decision Boundary
+# -------------------------------
+def make_meshgrid(x, y, h=0.02):
+    x_min, x_max = x.min() - 1, x.max() + 1
+    y_min, y_max = y.min() - 1, y.max() + 1
+    xx, yy = np.meshgrid(
+        np.arange(x_min, x_max, h),
+        np.arange(y_min, y_max, h)
+    )
+    return xx, yy
+
+def plot_contours(clf, xx, yy, **params):
+    Z = clf.predict(np.c_[xx.ravel(), yy.ravel()])
+    Z = Z.reshape(xx.shape)
+    return plt.contourf(xx, yy, Z, **params)
+
+# Create meshgrid
+xx, yy = make_meshgrid(X[:, 0], X[:, 1])
+
+# Plot
+plt.figure(figsize=(6, 4), dpi=120)
+
+plot_contours(
+    classifier_adb,
+    xx, yy,
+    cmap=plt.cm.coolwarm,
+    alpha=0.8
+)
+
+# Plot data points
+plt.scatter(
+    X[:, 0], X[:, 1],
+    c=y,
+    cmap=plt.cm.coolwarm,
+    edgecolors='k',
+    alpha=0.6
+)
+
+plt.xlabel("Feature 1")
+plt.ylabel("Feature 2")
+plt.title("AdaBoost Decision Boundary")
+
+plt.show()
