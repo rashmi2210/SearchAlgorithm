@@ -1,3 +1,5 @@
+#Informed Search Algorithms
+
 def aStarAlgo(start_node, stop_node):
     open_set = {start_node}
     closed_set = set()
