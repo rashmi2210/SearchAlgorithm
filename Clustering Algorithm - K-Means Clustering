@@ -1,0 +1,27 @@
+# K-Means Clustering 
+
+from sklearn.cluster import KMeans
+import pandas as pd
+
+# -------------------------------
+# Create dataset (same as record)
+# -------------------------------
+data = pd.DataFrame({
+    'Amount': [20, 25, 30, 40, 50, 60, 70, 80, 90],
+    'Frequency': [2, 2, 1, 1, 3, 4, 3, 2, 1]
+})
+
+# -------------------------------
+# Apply K-Means
+# -------------------------------
+kmeans = KMeans(n_clusters=2, random_state=0, n_init=10)
+kmeans.fit(data)
+
+# Predict cluster labels
+labels = kmeans.predict(data)
+
+# -------------------------------
+# Output (same format as record)
+# -------------------------------
+print("Output")
+print(labels)
