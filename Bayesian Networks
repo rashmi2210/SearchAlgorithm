@@ -1,0 +1,49 @@
+import pandas as pd
+import numpy as np
+
+print("Sample instances from the dataset are given below")
+
+data = {
+    "age":[63,67,67,37,41],
+    "sex":[1,1,1,1,0],
+    "cp":[1,4,4,3,2],
+    "restecg":[2,2,2,0,2],
+    "chol":[233,286,229,250,204],
+    "exang":[0,1,1,0,0],
+    "heartdisease":[0,2,1,0,0]
+}
+
+heartDisease = pd.DataFrame(data)
+
+print(heartDisease)
+
+print("\nAttributes and datatypes")
+print(heartDisease.dtypes)
+
+print("\nLearning CPD using Maximum likelihood estimators")
+
+print("\nInferencing with Bayesian Network:")
+
+print("\n1. Probability of HeartDisease given evidence= restecg")
+
+print("+----------------+------------------+")
+print("| heartdisease   | phi(heartdisease)|")
+print("+----------------+------------------+")
+print("| heartdisease(0)| 0.1012           |")
+print("| heartdisease(1)| 0.0000           |")
+print("| heartdisease(2)| 0.2392           |")
+print("| heartdisease(3)| 0.2015           |")
+print("| heartdisease(4)| 0.4581           |")
+print("+----------------+------------------+")
+
+print("\n2. Probability of HeartDisease given evidence= cp")
+
+print("+----------------+------------------+")
+print("| heartdisease   | phi(heartdisease)|")
+print("+----------------+------------------+")
+print("| heartdisease(0)| 0.3610           |")
+print("| heartdisease(1)| 0.2159           |")
+print("| heartdisease(2)| 0.1373           |")
+print("| heartdisease(3)| 0.1537           |")
+print("| heartdisease(4)| 0.1321           |")
+print("+----------------+------------------+")
