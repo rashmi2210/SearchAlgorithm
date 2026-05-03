@@ -1,0 +1,82 @@
+# Averaging (Bagging) Ensemble vs KNN on Iris dataset
+
+from sklearn import datasets
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import BaggingClassifier
+from sklearn.neighbors import KNeighborsClassifier
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Load dataset
+iris = datasets.load_iris()
+
+# Use only first two features (for plotting)
+X = iris.data[:, :2]
+y = iris.target
+
+# Train-test split
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# -------------------------------
+# Bagging Classifier (Ensemble)
+# -------------------------------
+bagging = BaggingClassifier(
+    estimator=KNeighborsClassifier(),
+    max_samples=10,
+    n_estimators=100,
+    random_state=42
+)
+
+bagging.fit(X_train, y_train)
+bag_score = bagging.score(X_test, y_test)
+
+print("Bagging Classifier Accuracy:", bag_score)
+
+# -------------------------------
+# Single KNN Classifier
+# -------------------------------
+knn = KNeighborsClassifier()
+knn.fit(X_train, y_train)
+knn_score = knn.score(X_test, y_test)
+
+print("KNN Classifier Accuracy:", knn_score)
+
+# -------------------------------
+# Plot decision boundary
+# -------------------------------
+def make_meshgrid(x, y, h=0.02):
+    x_min, x_max = x.min() - 1, x.max() + 1
+    y_min, y_max = y.min() - 1, y.max() + 1
+    xx, yy = np.meshgrid(
+        np.arange(x_min, x_max, h),
+        np.arange(y_min, y_max, h)
+    )
+    return xx, yy
+
+def plot_contours(clf, xx, yy, **params):
+    Z = clf.predict(np.c_[xx.ravel(), yy.ravel()])
+    Z = Z.reshape(xx.shape)
+    return plt.contourf(xx, yy, Z, **params)
+
+# Meshgrid
+xx, yy = make_meshgrid(X[:, 0], X[:, 1])
+
+# Plot
+plt.figure(figsize=(6, 4), dpi=120)
+
+plot_contours(bagging, xx, yy, cmap=plt.cm.coolwarm, alpha=0.8)
+
+plt.scatter(
+    X[:, 0], X[:, 1],
+    c=y,
+    cmap=plt.cm.coolwarm,
+    edgecolors='k'
+)
+
+plt.xlabel("Feature 1")
+plt.ylabel("Feature 2")
+plt.title("Bagging vs KNN Decision Boundary")
+
+plt.show()
