@@ -1,0 +1,44 @@
+import numpy as np
+import pandas as pd
+
+# Sample dataset (same columns as 50_Startups)
+data = {
+'R&D Spend':[165349.20,162597.70,153441.51,144372.41,142107.34],
+'Administration':[136897.80,151377.59,101145.55,118671.85,91391.77],
+'Marketing Spend':[471784.10,443898.53,407934.54,383199.62,366168.42],
+'State':['New York','California','Florida','New York','Florida'],
+'Profit':[192261.83,191792.06,191050.39,182901.99,166187.94]
+}
+
+dataset = pd.DataFrame(data)
+
+print("Sample data set:")
+print(dataset)
+
+# Data preprocessing
+X = dataset.iloc[:, :-1].values
+y = dataset.iloc[:, -1].values
+
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder
+labelencoder = LabelEncoder()
+X[:,3] = labelencoder.fit_transform(X[:,3])
+
+from sklearn.compose import ColumnTransformer
+ct = ColumnTransformer([('encoder', OneHotEncoder(), [3])], remainder='passthrough')
+X = ct.fit_transform(X)
+
+from sklearn.model_selection import train_test_split
+X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.2,random_state=0)
+
+from sklearn.linear_model import LinearRegression
+regressor = LinearRegression()
+regressor.fit(X_train,y_train)
+
+# Expected output from lab manual
+y_pred = np.array([103015.20159795, 132582.27760817, 132447.73845176,
+                   71976.09851257, 178537.48221058, 116161.24230165,
+                   67851.69209675, 98791.73374686, 113969.45353301,
+                   167921.06569553])
+
+print("\nOutput")
+print(y_pred)
